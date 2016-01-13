@@ -1,0 +1,61 @@
+parameters:
+    # Notification handler
+    numerique1_notification.notification_handler.class: Numerique1\Bundle\NotificationBundle\Event\Handler\NotificationHandler
+    # Listener
+    numerique1_notification.doctrine_listener.class: Numerique1\Bundle\NotificationBundle\Doctrine\Listener\NotificationDoctrineListener
+    # Containers
+    numerique1_notification.notifiables_resolver.container.class: Numerique1\Bundle\NotificationBundle\Resolver\NotifiablesResolverContainer
+    numerique1_notification.template_resolver.container.class: Numerique1\Bundle\NotificationBundle\Resolver\TemplateResolverContainer
+    # Defaults resolvers
+    numerique1_notification.default_users_resolver.class: Numerique1\Bundle\NotificationBundle\Resolver\DefaultUsersResolver
+    numerique1_notification.default_template_resolver.class: Numerique1\Bundle\NotificationBundle\Resolver\DefaultTemplateResolver
+
+services:
+    # Handler
+    numerique1_notification.notification.handler:
+        class: %numerique1_notification.notification_handler.class%
+        arguments:
+            - @service_container
+            - %numerique1_notification.notification_factory.class%
+            - %numerique1_notification.configs%
+
+    numerique1_notification.notification.factory:
+        class: %numerique1_notification.notification_factory.class%
+        arguments:
+            - @numerique1_notification.notifiables_resolver.container
+            - @numerique1_notification.template_resolver.container
+            - @doctrine.orm.entity_manager
+            - @templating
+
+   # Event listeners
+    numerique1_notification.docrine.event.listener:
+        class: %numerique1_notification.doctrine_listener.class%
+        arguments:
+            - @event_dispatcher
+            - %numerique1_notification.notification.class%
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }
+            - { name: doctrine.event_listener, event: postUpdate }
+            - { name: doctrine.event_listener, event: postRemove }
+            - { name: doctrine.event_listener, event: preRemove }
+
+    # Resolvers
+    numerique1_notification.default_users_resolver:
+        class: %numerique1_notification.default_notifiables_resolver.class%
+        arguments:
+            - @security.context
+        tags:
+            - { name: numerique1_notification.notifiables_resolver, alias: notifiables_resolver }
+
+    numerique1_notification.notifiables_resolver.container:
+        class: %numerique1_notification.notifiables_resolver.container.class%
+        lazy: true
+
+    numerique1_notification.default_template_resolver:
+        class: %numerique1_notification.default_template_resolver.class%
+        tags:
+            - { name: numerique1_notification.template_resolver, alias: template_resolver }
+
+    numerique1_notification.template_resolver.container:
+        class: %numerique1_notification.template_resolver.container.class%
+        lazy: true
