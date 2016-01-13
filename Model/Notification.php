@@ -1,6 +1,6 @@
 <?php
 
-namespace Numerique1\Bundle\NotificationBundle\Entity;
+namespace Numerique1\Bundle\NotificationBundle\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -8,7 +8,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Class Notification
- * @package Numerique1\Bundle\NotificationBundle\Entity
+ * @package Numerique1\Bundle\NotificationBundle\Model
  * @author shuyqck <nicolas.duvollet@numerique1.fr>
  */
 abstract class Notification
