@@ -1,0 +1,21 @@
+{
+  "name":         "numerique1/notification-bundle",
+  "description":  "Numerique1 notification bundle is used to create view or e-mail notifications",
+  "keywords":     ["notification"],
+  "type":         "symfony-bundle",
+  "license":      "MIT",
+  "authors":     [
+    {
+      "name":     "Nicolas Du",
+      "email":    "nicolas.duvollet@numerique1.fr"
+    },
+    {
+      "name":     "Stewen Ferre",
+      "email":    "stewen.ferre@numerique1.fr"
+    }
+  ],
+  "autoload": {
+    "psr-0": { "Numerique1\\Bundle": "" }
+  },
+  "target-dir": "Numerique1/Bundle"
+}
