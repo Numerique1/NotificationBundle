@@ -16,7 +16,7 @@ services:
         class: %numerique1_notification.notification_handler.class%
         arguments:
             - @service_container
-            - %numerique1_notification.notification_factory.class%
+            - @numerique1_notification.notification.factory
             - %numerique1_notification.configs%
 
     numerique1_notification.notification.factory:
