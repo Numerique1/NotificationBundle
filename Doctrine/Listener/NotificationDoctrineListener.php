@@ -12,7 +12,7 @@ class NotificationDoctrineListener
      */
     protected $eventDispatcher;
 
-    protected $class
+    protected $class;
     /**
      * @param EventDispatcherInterface $eventDispatcher
      */
