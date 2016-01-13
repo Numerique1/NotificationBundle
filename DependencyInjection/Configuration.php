@@ -21,6 +21,7 @@ class Configuration implements ConfigurationInterface
         $configNode = $treeBuilder
             ->root('numerique1_notification')
             ->scalarNode('factory_class')->isRequired()->end()
+            ->scalarNode('notification_class')->isRequired()->end()
             ->useAttributeAsKey('name')
             ->prototype('array')
             ->children()
