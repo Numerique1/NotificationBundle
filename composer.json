@@ -15,7 +15,7 @@
     }
   ],
   "autoload": {
-    "psr-0": { "Numerique1\\Bundle": "" }
+    "psr-0": { "Numerique1\\Bundle\\NotificationBundle": "" }
   },
-  "target-dir": "Numerique1/Bundle"
+  "target-dir": "Numerique1/Bundle/NotificationBundle"
 }
