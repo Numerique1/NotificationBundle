@@ -1,5 +1,5 @@
 <?php
-namespace Numerique1\Bundle\NotificationBundle\Resolver\Defaults\Resolver;
+namespace Numerique1\Bundle\NotificationBundle\Resolver\Defaults;
 
 use Numerique1\Bundle\NotificationBundle\Model\NotifiableInterface;
 use Numerique1\Bundle\NotificationBundle\Resolver\NotifiablesResolverInterface;
