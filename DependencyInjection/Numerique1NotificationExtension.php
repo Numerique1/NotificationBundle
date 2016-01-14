@@ -21,28 +21,31 @@ class Numerique1NotificationExtension extends Extension
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
+
         $container->setParameter('numerique1_notification.notification_factory.class', $config['factory_class']);
         $container->setParameter('numerique1_notification.notification.class', $config['notification_class']);
         unset($config['factory_class']);
-        $container->setParameter('numerique1_notification.configs', $this->parseConfig($config));
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $container->setParameter('numerique1_notification.configs', $this->parseConfig($config['notifications']));
+
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
     }
+
+
     /**
      * Does whatever is needed to transform the config in an acceptable argument for the factory
-     *
      * @param array $configs
-     *
      * @return array
      */
     public function parseConfig(array $configs)
     {
-        foreach ($configs as $name => $config) {
+        foreach ($configs as $name => $config)
+        {
             $configs[$config['class']] = $configs[$name];
             unset($configs[$config['class']]['class']);
             unset($configs[$name]);
         }
+
         return $configs;
     }
-
 }

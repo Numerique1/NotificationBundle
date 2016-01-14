@@ -1,14 +1,9 @@
 <?php
-
-namespace Numerique1\Bundle\NotificationBundle\Entity;
-
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-use Gedmo\Mapping\Annotation as Gedmo;
+namespace Numerique1\Bundle\NotificationBundle\Model;
 
 /**
  * Class Notification
- * @package Numerique1\Bundle\NotificationBundle\Entity
+ * @package Numerique1\Bundle\NotificationBundle\Model
  * @author shuyqck <nicolas.duvollet@numerique1.fr>
  */
 abstract class Notification
@@ -30,7 +25,8 @@ abstract class Notification
     }
 
     /**
-     * @param mixed $targetClass
+     * @param $targetClass
+     * @return $this
      */
     public function setTargetClass($targetClass)
     {
@@ -47,7 +43,8 @@ abstract class Notification
     }
 
     /**
-     * @param mixed $targetId
+     * @param $targetId
+     * @return $this
      */
     public function setTargetId($targetId)
     {
@@ -64,12 +61,12 @@ abstract class Notification
     }
 
     /**
-     * @param mixed $content
+     * @param $content
+     * @return $this
      */
     public function setContent($content)
     {
         $this->content = $content;
         return $this;
     }
-
 }

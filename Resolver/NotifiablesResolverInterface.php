@@ -5,7 +5,8 @@ interface NotifiablesResolverInterface
 {
     /**
      * @param $entity
-     * @return array
+     * @param array $parameters
+     * @return mixed
      */
     public function resolve($entity, $parameters = array());
 }

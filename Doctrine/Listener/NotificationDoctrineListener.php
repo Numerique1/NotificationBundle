@@ -1,10 +1,11 @@
 <?php
 namespace Numerique1\Bundle\NotificationBundle\Doctrine\Listener;
+
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Numerique1\Bundle\NotificationBundle\Event\NotificationEvent;
-use Doctrine\ORM\EntityManager;
+
 class NotificationDoctrineListener
 {
     /**
@@ -12,14 +13,17 @@ class NotificationDoctrineListener
      */
     protected $eventDispatcher;
 
-    protected $class
+    protected $class;
+
     /**
+     * NotificationDoctrineListener constructor.
      * @param EventDispatcherInterface $eventDispatcher
+     * @param $notificationClass
      */
     public function __construct(EventDispatcherInterface $eventDispatcher, $notificationClass)
     {
         $this->eventDispatcher = $eventDispatcher;
-        $this->class           = $notificationClass;
+        $this->class = $notificationClass;
     }
 
     /**
@@ -32,8 +36,10 @@ class NotificationDoctrineListener
     {
         $this->eventDispatcher
             ->dispatch('numerique1.notification.event.entity_post_update', $this->getNotificationEvent($args));
+
         return $this;
     }
+
     /**
      * Post persist event process
      *
@@ -46,6 +52,7 @@ class NotificationDoctrineListener
             ->dispatch('numerique1.notification.event.entity_post_persist', $this->getNotificationEvent($args));
         return $this;
     }
+
     /**
      * Post remove event process
      *
@@ -54,10 +61,10 @@ class NotificationDoctrineListener
      */
     public function postRemove(LifecycleEventArgs $args)
     {
-        $em = $args->getEntityManager();
         $this->eventDispatcher
             ->dispatch('numerique1.notification.event.entity_post_remove', $this->getNotificationEvent($args));
     }
+
     /**
      * Pre remove event process
      *
@@ -75,7 +82,7 @@ class NotificationDoctrineListener
             'targetId' => $args->getEntity()->getId()
         ));
 
-        foreach($notifications as $notification)
+        foreach ($notifications as $notification)
         {
             $em->remove($notification);
         }

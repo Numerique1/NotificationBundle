@@ -1,13 +1,19 @@
 <?php
 namespace Numerique1\Bundle\NotificationBundle\Resolver\Container;
 
+use Numerique1\Bundle\NotificationBundle\Resolver\NotifiablesResolverInterface;
+
 class NotifiablesResolverContainer
 {
     /**
-     * @var UsersResolverInterface[] resolvers
+     * @var NotifiablesResolverInterface[] resolvers
      */
     protected $resolvers;
 
+
+    /**
+     * NotifiablesResolverContainer constructor.
+     */
     public function __construct()
     {
         $this->resolvers = array();
@@ -15,17 +21,17 @@ class NotifiablesResolverContainer
 
     /**
      * Add resolver to list
-     *
-     * @param UsersResolverInterface $resolver
+     * @param NotifiablesResolverInterface $resolver
      */
-    public function addResolver($serviceId, UsersResolverInterface $resolver)
+    public function addResolver($serviceId, NotifiablesResolverInterface $resolver)
     {
         $this->resolvers[$serviceId] = $resolver;
     }
 
     /**
      * @param $name
-     * @return UsersResolverInterface
+     * @return NotifiablesResolverInterface
+     * @throws \Exception
      */
     public function getResolver($name)
     {

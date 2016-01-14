@@ -2,8 +2,6 @@
 
 namespace Numerique1\Bundle\NotificationBundle\DependencyInjection\Compiler;
 
-use Doctrine\ORM\EntityManager;
-
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 
@@ -26,7 +24,7 @@ class EventsCompilerPass implements CompilerPassInterface
             return;
         }
 
-        $dispatcher = $container->getDefinition(self::DISPATCHER_KEY);
+        $dispatcher = $container->findDefinition(self::DISPATCHER_KEY);
 
         $eventNames = array(
             'numerique1.notification.event.controller_start',
@@ -37,6 +35,7 @@ class EventsCompilerPass implements CompilerPassInterface
             'numerique1.notification.event.entity_post_persist',
             'numerique1.notification.event.entity_post_remove'
         );
+
         foreach ($eventNames as $eventName) {
             $dispatcher->addMethodCall(
                 'addListenerService',

@@ -1,12 +1,15 @@
 <?php
 namespace Numerique1\Bundle\NotificationBundle\Resolver\Container;
 
+use Numerique1\Bundle\NotificationBundle\Resolver\TemplateResolverInterface;
+
 class TemplateResolverContainer
 {
     /**
      * @var TemplateResolverInterface[] resolvers
      */
     protected $resolvers;
+
 
     public function __construct()
     {
@@ -15,8 +18,8 @@ class TemplateResolverContainer
 
     /**
      * Add resolver to list
-     *
-     * @param UsersResolverInterface $resolver
+     * @param $serviceId
+     * @param TemplateResolverInterface $resolver
      */
     public function addResolver($serviceId, TemplateResolverInterface $resolver)
     {
@@ -25,7 +28,8 @@ class TemplateResolverContainer
 
     /**
      * @param $name
-     * @return UsersResolverInterface
+     * @return TemplateResolverInterface
+     * @throws \Exception
      */
     public function getResolver($name)
     {

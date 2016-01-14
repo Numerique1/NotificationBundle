@@ -1,7 +1,8 @@
 <?php
-namespace Numerique1\Bundle\NotificationBundle\Resolver;
+namespace Numerique1\Bundle\NotificationBundle\Resolver\Defaults\Resolver;
 
-use Numerique1\Bundle\NotificationBundle\Entity\NotifiableInterface;
+use Numerique1\Bundle\NotificationBundle\Model\NotifiableInterface;
+use Numerique1\Bundle\NotificationBundle\Resolver\NotifiablesResolverInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
 class DefaultNotifiablesResolver implements NotifiablesResolverInterface
@@ -18,18 +19,20 @@ class DefaultNotifiablesResolver implements NotifiablesResolverInterface
 
     /**
      * @param $entity
+     * @param array $parameters
      * @return array
      */
     public function resolve($entity, $parameters = array())
     {
         $return = array();
-        if($entity instanceof NotifiableInterface)
+        if ($entity instanceof NotifiableInterface)
         {
-            foreach($entity->getNotifiables() as $notifiable)
+            foreach ($entity->getNotifiables() as $notifiable)
             {
-                    $return[] = $notifiable;
+                $return[] = $notifiable;
             }
         }
+
         return $return;
     }
 }

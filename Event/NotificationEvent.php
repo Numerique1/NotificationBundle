@@ -1,5 +1,6 @@
 <?php
 namespace Numerique1\Bundle\NotificationBundle\Event;
+
 use Symfony\Component\EventDispatcher\Event;
 
 class NotificationEvent extends Event
@@ -14,6 +15,12 @@ class NotificationEvent extends Event
      */
     protected $parameters;
 
+
+    /**
+     * NotificationEvent constructor.
+     * @param $entity
+     * @param array $parameters
+     */
     public function __construct($entity, $parameters = array())
     {
         $this->entity = $entity;

@@ -4,11 +4,11 @@ parameters:
     # Listener
     numerique1_notification.doctrine_listener.class: Numerique1\Bundle\NotificationBundle\Doctrine\Listener\NotificationDoctrineListener
     # Containers
-    numerique1_notification.notifiables_resolver.container.class: Numerique1\Bundle\NotificationBundle\Resolver\NotifiablesResolverContainer
-    numerique1_notification.template_resolver.container.class: Numerique1\Bundle\NotificationBundle\Resolver\TemplateResolverContainer
+    numerique1_notification.notifiables_resolver.container.class: Numerique1\Bundle\NotificationBundle\Resolver\Container\NotifiablesResolverContainer
+    numerique1_notification.template_resolver.container.class: Numerique1\Bundle\NotificationBundle\Resolver\Container\TemplateResolverContainer
     # Defaults resolvers
-    numerique1_notification.default_users_resolver.class: Numerique1\Bundle\NotificationBundle\Resolver\DefaultUsersResolver
-    numerique1_notification.default_template_resolver.class: Numerique1\Bundle\NotificationBundle\Resolver\DefaultTemplateResolver
+    numerique1_notification.default_template_resolver.class: Numerique1\Bundle\NotificationBundle\Resolver\Defaults\DefaultTemplateResolver
+    numerique1_notification.default_notifiables_resolver.class: Numerique1\Bundle\NotificationBundle\Resolver\Defaults\Resolver\DefaultNotifiablesResolver
 
 services:
     # Handler
@@ -16,7 +16,7 @@ services:
         class: %numerique1_notification.notification_handler.class%
         arguments:
             - @service_container
-            - %numerique1_notification.notification_factory.class%
+            - @numerique1_notification.notification.factory
             - %numerique1_notification.configs%
 
     numerique1_notification.notification.factory:
