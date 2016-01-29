@@ -15,17 +15,26 @@ class NotificationDoctrineListener
      */
     protected $eventDispatcher;
 
-    protected $class;
+    /**
+     * @var string
+     */
+    protected $notificationEntityClass;
+
+    /**
+     * @var array
+     */
+    protected $notificationRules;
 
     /**
      * NotificationDoctrineListener constructor.
      * @param EventDispatcherInterface $eventDispatcher
      * @param $notificationClass
      */
-    public function __construct(EventDispatcherInterface $eventDispatcher, $notificationClass)
+    public function __construct(EventDispatcherInterface $eventDispatcher, $notificationEntityClass, array $notificationRules)
     {
         $this->eventDispatcher = $eventDispatcher;
-        $this->class = $notificationClass;
+        $this->notificationEntityClass = $notificationEntityClass;
+        $this->notificationRules = $notificationRules;
     }
 
     /**
@@ -36,9 +45,17 @@ class NotificationDoctrineListener
      */
     public function preUpdate(PreUpdateEventArgs $args)
     {
-        $event = new PreUpdateNotificationEvent($args->getEntity(), $args->getEntityChangeSet());
-        $this->eventDispatcher
-            ->dispatch('numerique1.notification.event.entity_pre_update', $event);
+        $entityClass = ClassUtils::getClass($args->getEntity());
+        if (array_key_exists($entityClass, $this->notificationRules))
+        {
+            $rules = $this->notificationRules[$entityClass];
+            $event = new PreUpdateNotificationEvent($args->getEntity(), $args->getEntityChangeSet(), array(
+                'em' => $args->getEntityManager(),
+                'rules' => $rules
+            ));
+            $this->eventDispatcher
+                ->dispatch('numerique1.notification.event.entity_pre_update', $event);
+        }
 
         return $this;
     }
@@ -51,8 +68,11 @@ class NotificationDoctrineListener
      */
     public function postUpdate(LifecycleEventArgs $args)
     {
-        $this->eventDispatcher
-            ->dispatch('numerique1.notification.event.entity_post_update', $this->getNotificationEvent($args));
+        $event = $this->getNotificationEvent($args);
+        if($event){
+            $this->eventDispatcher
+                ->dispatch('numerique1.notification.event.entity_post_update', $event);
+        }
 
         return $this;
     }
@@ -65,8 +85,11 @@ class NotificationDoctrineListener
      */
     public function postPersist(LifecycleEventArgs $args)
     {
-        $this->eventDispatcher
-            ->dispatch('numerique1.notification.event.entity_post_persist', $this->getNotificationEvent($args));
+        $event = $this->getNotificationEvent($args);
+        if($event){
+            $this->eventDispatcher
+                ->dispatch('numerique1.notification.event.entity_post_persist', $event);
+        }
         return $this;
     }
 
@@ -78,8 +101,13 @@ class NotificationDoctrineListener
      */
     public function postRemove(LifecycleEventArgs $args)
     {
-        $this->eventDispatcher
-            ->dispatch('numerique1.notification.event.entity_post_remove', $this->getNotificationEvent($args));
+        $event = $this->getNotificationEvent($args);
+        if($event){
+            $this->eventDispatcher
+                ->dispatch('numerique1.notification.event.entity_post_remove', $event);
+        }
+
+        return $this;
     }
 
     /**
@@ -91,10 +119,7 @@ class NotificationDoctrineListener
     public function preRemove(LifecycleEventArgs $args)
     {
         $em = $args->getEntityManager();
-        $this->eventDispatcher
-            ->dispatch('numerique1.notification.event.entity_pre_remove', $this->getNotificationEvent($args));
-
-        $notifications = $em->getRepository($this->class)->findBy(array(
+        $notifications = $em->getRepository($this->notificationEntityClass)->findBy(array(
             'targetClass' => ClassUtils::getClass($args->getEntity()),
             'targetId' => $args->getEntity()->getId()
         ));
@@ -113,7 +138,17 @@ class NotificationDoctrineListener
      */
     public function getNotificationEvent(LifecycleEventArgs $args)
     {
-        $event = new NotificationEvent($args->getEntity());
-        return $event;
+        $entityClass = ClassUtils::getClass($args->getEntity());
+        if (array_key_exists($entityClass, $this->notificationRules))
+        {
+            $rules = $this->notificationRules[$entityClass];
+            $event = new NotificationEvent($args->getEntity(), array(
+                'em' => $args->getEntityManager(),
+                'rules' => $rules
+            ));
+            return $event;
+        }
+
+        return false;
     }
 }

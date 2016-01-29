@@ -33,6 +33,7 @@ services:
         arguments:
             - @event_dispatcher
             - %numerique1_notification.notification.class%
+            - %numerique1_notification.configs%
         tags:
             - { name: doctrine.event_listener, event: postPersist }
             - { name: doctrine.event_listener, event: preUpdate }
