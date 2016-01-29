@@ -3,6 +3,8 @@ namespace Numerique1\Bundle\NotificationBundle\Doctrine\Listener;
 
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Numerique1\Bundle\NotificationBundle\Event\PreUpdateNotificationEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Numerique1\Bundle\NotificationBundle\Event\NotificationEvent;
 
@@ -24,6 +26,21 @@ class NotificationDoctrineListener
     {
         $this->eventDispatcher = $eventDispatcher;
         $this->class = $notificationClass;
+    }
+
+    /**
+     * Pre update event process
+     *
+     * @param LifecycleEventArgs $args
+     * @return $this
+     */
+    public function preUpdate(PreUpdateEventArgs $args)
+    {
+        $event = new PreUpdateNotificationEvent($args->getEntity(), $args->getEntityChangeSet());
+        $this->eventDispatcher
+            ->dispatch('numerique1.notification.event.entity_pre_update', $event);
+
+        return $this;
     }
 
     /**
