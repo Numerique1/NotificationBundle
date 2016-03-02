@@ -1,7 +1,7 @@
 <?php
 namespace Numerique1\Bundle\NotificationBundle;
 
-use FOS\UserBundle\DependencyInjection\Compiler\RegisterMappingsPass;
+use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
 use Numerique1\Bundle\NotificationBundle\DependencyInjection\Compiler\EventsCompilerPass;
 use Numerique1\Bundle\NotificationBundle\DependencyInjection\Compiler\NotifiablesResolverCompilerPass;
 use Numerique1\Bundle\NotificationBundle\DependencyInjection\Compiler\TemplateResolverCompilerPass;
@@ -30,6 +30,8 @@ class Numerique1NotificationBundle extends Bundle
             realpath(__DIR__ . '/Resources/config/ORM') => 'Numerique1\Bundle\NotificationBundle\Model',
         );
 
-        $container->addCompilerPass(RegisterMappingsPass::createOrmMappingDriver($mappings));
+        if (class_exists('Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass')) {
+            $container->addCompilerPass(DoctrineOrmMappingsPass::createXmlMappingDriver($mappings));
+        }
     }
 }
