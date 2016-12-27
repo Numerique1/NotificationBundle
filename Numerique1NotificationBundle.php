@@ -3,8 +3,7 @@ namespace Numerique1\Bundle\NotificationBundle;
 
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
 use Numerique1\Bundle\NotificationBundle\DependencyInjection\Compiler\EventsCompilerPass;
-use Numerique1\Bundle\NotificationBundle\DependencyInjection\Compiler\NotifiablesResolverCompilerPass;
-use Numerique1\Bundle\NotificationBundle\DependencyInjection\Compiler\TemplateResolverCompilerPass;
+use Numerique1\Bundle\NotificationBundle\DependencyInjection\Compiler\NotificationBuilderCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -14,8 +13,7 @@ class Numerique1NotificationBundle extends Bundle
     {
         parent::build($container);
 
-        $container->addCompilerPass(new NotifiablesResolverCompilerPass());
-        $container->addCompilerPass(new TemplateResolverCompilerPass());
+        $container->addCompilerPass(new NotificationBuilderCompilerPass());
         $container->addCompilerPass(new EventsCompilerPass());
 
         $this->addRegisterMappingsPass($container);

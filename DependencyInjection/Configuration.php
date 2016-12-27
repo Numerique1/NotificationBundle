@@ -22,8 +22,6 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->scalarNode('factory_class')->isRequired()->end()
-                ->scalarNode('notification_class')->isRequired()->end()
                 ->arrayNode('notifications')
                     ->useAttributeAsKey('name')
                     ->prototype('array')
@@ -34,9 +32,8 @@ class Configuration implements ConfigurationInterface
                             ->children()
                                 ->scalarNode('event')->cannotBeEmpty()->end()
                                 ->scalarNode('route')->defaultValue('*')->end()
-                                ->scalarNode('template')->defaultFalse()->end()
-                                ->scalarNode('resolver')->defaultValue('numerique1_notification.default_users_resolver')->end()
-                                ->scalarNode('template_resolver')->defaultValue('numerique1_notification.default_template_resolver')->end()
+                                ->scalarNode('builder')->cannotBeEmpty()->end()
+                                ->variableNode('extra')
                             ->end()
                         ->end()
                     ->end()

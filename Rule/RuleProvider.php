@@ -1,22 +1,24 @@
 <?php
-namespace Numerique1\Bundle\NotificationBundle\Event\Handler;
+namespace Numerique1\Bundle\NotificationBundle\Rule;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Util\ClassUtils;
+use Numerique1\Bundle\NotificationBundle\Event\Events\PreBuildNotificationEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Numerique1\Bundle\NotificationBundle\Event\NotificationEvent;
-use Numerique1\Bundle\NotificationBundle\Factory\NotificationFactoryInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-class NotificationHandler
+/**
+ * Class RuleProvider
+ * @package Numerique1\Bundle\NotificationBundle\Rule
+ */
+class RuleProvider
 {
+
     /**
      * @var ContainerInterface
      */
     protected $container;
-
-    /**
-     * @var NotificationFactoryInterface
-     */
-    protected $factory;
 
     /**
      * @var array
@@ -24,25 +26,23 @@ class NotificationHandler
     protected $config;
 
 
-    public function __construct(ContainerInterface $container, NotificationFactoryInterface $factory, array $config)
+    public function __construct(ContainerInterface $container, array $config)
     {
-        $this->config = $config;
         $this->container = $container;
-        $this->factory = $factory;
+        $this->config = $config;
     }
 
     /**
-     * Handle event
-     * @param NotificationEvent $event
+     * @param $entity
+     * @param $eventName
      * @throws \Exception
      */
-    public function handle(NotificationEvent $event)
+    public function get($entity, $eventName)
     {
         if (null === $this->container->get('security.context')->getToken()){
             return;
         }
 
-        $entity = $event->getEntity();
         $entityClass = ClassUtils::getClass($entity);
         $config = $this->getConfig($entityClass);
 
@@ -57,7 +57,7 @@ class NotificationHandler
             foreach ($config['rules'] as $rule)
             {
                 if (
-                    $event->getName() === $rule['event'] &&
+                    $eventName === $rule['event'] &&
                     ($rule['route'] === '*' || ($rule['route'] !== '*' && $rule['route'] === $route))
                 )
                 {
@@ -86,8 +86,7 @@ class NotificationHandler
 
             if (count($matchingRules) > 0)
             {
-                $rule = $matchingRules[0];
-                $this->factory->create($event, $rule);
+                return $matchingRules[0];
             }
         }
     }

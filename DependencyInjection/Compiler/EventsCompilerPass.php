@@ -2,6 +2,7 @@
 
 namespace Numerique1\Bundle\NotificationBundle\DependencyInjection\Compiler;
 
+use Numerique1\Bundle\NotificationBundle\Event\Events\PreBuildNotificationEvent;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 
@@ -12,7 +13,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
  */
 class EventsCompilerPass implements CompilerPassInterface
 {
-    const SERVICE_KEY    = 'numerique1_notification.notification.handler';
+    const SERVICE_KEY    = 'numerique1_notification.event.handler.notification_builder_handler';
     const DISPATCHER_KEY = 'event_dispatcher';
 
     /**
@@ -27,13 +28,13 @@ class EventsCompilerPass implements CompilerPassInterface
         $dispatcher = $container->findDefinition(self::DISPATCHER_KEY);
 
         $eventNames = array(
-            'numerique1.notification.event.controller_start',
-            'numerique1.notification.event.controller_end',
-            'numerique1.notification.event.entity_pre_update',
-            'numerique1.notification.event.entity_post_update',
-            'numerique1.notification.event.entity_pre_persist',
-            'numerique1.notification.event.entity_post_persist',
-            'numerique1.notification.event.entity_post_remove'
+            PreBuildNotificationEvent::EVENT_NAME_CONTROLLER,
+            PreBuildNotificationEvent::EVENT_NAME_PRE_PERSIST,
+            PreBuildNotificationEvent::EVENT_NAME_POST_PERSIST,
+            PreBuildNotificationEvent::EVENT_NAME_PRE_UPDATE,
+            PreBuildNotificationEvent::EVENT_NAME_POST_UPDATE,
+            PreBuildNotificationEvent::EVENT_NAME_PRE_REMOVE,
+            PreBuildNotificationEvent::EVENT_NAME_POST_REMOVE
         );
 
         foreach ($eventNames as $eventName) {

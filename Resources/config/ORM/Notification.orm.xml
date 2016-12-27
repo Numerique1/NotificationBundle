@@ -6,11 +6,16 @@
 
     <mapped-superclass name="Numerique1\Bundle\NotificationBundle\Model\Notification">
 
-        <field name="targetClass" column="target_class" type="string" length="255" />
+        <field name="message" column="message" type="text"/>
 
-        <field name="targetId" column="target_id" type="integer" />
+        <one-to-many field="instances" target-entity="Numerique1\Bundle\NotificationBundle\Model\NotificationInstance" mapped-by="notification">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        <one-to-many/>
 
-        <field name="content" column="content" type="text"/>
+        <field name="meta" column="meta" type="json_array"/>
 
         <field name="createdAt" column="created_at" type="datetime"/>
 

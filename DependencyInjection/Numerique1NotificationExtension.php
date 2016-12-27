@@ -22,9 +22,10 @@ class Numerique1NotificationExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter('numerique1_notification.notification_factory.class', $config['factory_class']);
-        $container->setParameter('numerique1_notification.notification.class', $config['notification_class']);
-        unset($config['factory_class']);
+//        $container->setParameter('numerique1_notification.notification_factory.class', $config['factory_class']);
+//        $container->setParameter('numerique1_notification.notification.class', $config['notification_class']);
+//        $container->setParameter('numerique1_notification.instance.class', $config['instance_class']);
+//        unset($config['factory_class']);
         $container->setParameter('numerique1_notification.configs', $this->parseConfig($config['notifications']));
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));

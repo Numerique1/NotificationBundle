@@ -1,39 +1,31 @@
 parameters:
-    # Notification handler
-    numerique1_notification.notification_handler.class: Numerique1\Bundle\NotificationBundle\Event\Handler\NotificationHandler
+# EVENT
+    # Handler
+    numerique1_notification.event.handler.notification_builder_handler.class: Numerique1\Bundle\NotificationBundle\Event\Handler\NotificationBuilderHandler
     # Listener
-    numerique1_notification.doctrine_listener.class: Numerique1\Bundle\NotificationBundle\Doctrine\Listener\NotificationDoctrineListener
-    # Containers
-    numerique1_notification.notifiables_resolver.container.class: Numerique1\Bundle\NotificationBundle\Resolver\Container\NotifiablesResolverContainer
-    numerique1_notification.template_resolver.container.class: Numerique1\Bundle\NotificationBundle\Resolver\Container\TemplateResolverContainer
-    # Defaults resolvers
-    numerique1_notification.default_template_resolver.class: Numerique1\Bundle\NotificationBundle\Resolver\Defaults\DefaultTemplateResolver
-    numerique1_notification.default_notifiables_resolver.class: Numerique1\Bundle\NotificationBundle\Resolver\Defaults\DefaultNotifiablesResolver
+    numerique1_notification.event.listener.notification_doctrine_listener.class: Numerique1\Bundle\NotificationBundle\Event\Listener\NotificationDoctrineListener
+# RULE
+    #Provider
+    numerique1_notification.rule.rule_provider.class: Numerique1\Bundle\NotificationBundle\Rule\RuleProvider
+# Builder
+    # Container
+    numerique1_notification.builder.notification_builder_container.class: Numerique1\Bundle\NotificationBundle\Builder\NotificationBuilderContainer
 
 services:
+#EVENT
     # Handler
-    numerique1_notification.notification.handler:
-        class: %numerique1_notification.notification_handler.class%
-        arguments:
-            - @service_container
-            - @numerique1_notification.notification.factory
-            - %numerique1_notification.configs%
-
-    numerique1_notification.notification.factory:
-        class: %numerique1_notification.notification_factory.class%
-        arguments:
-            - @numerique1_notification.notifiables_resolver.container
-            - @numerique1_notification.template_resolver.container
-            - @doctrine.orm.entity_manager
-            - @templating
-
-   # Event listeners
-    numerique1_notification.docrine.event.listener:
-        class: %numerique1_notification.doctrine_listener.class%
+    numerique1_notification.event.handler.notification_builder_handler:
+        class: %numerique1_notification.event.handler.notification_builder_handler.class%
         arguments:
             - @event_dispatcher
-            - %numerique1_notification.notification.class%
-            - %numerique1_notification.configs%
+            - @numerique1_notification.builder.notification_builder_container
+
+   # Listener
+    numerique1_notification.event.listener.notification_doctrine_listener.listener:
+        class: %numerique1_notification.event.listener.notification_doctrine_listener.class%
+        arguments:
+            - @event_dispatcher
+            - @numerique1_notification.rule.rule_provider
         tags:
             - { name: doctrine.event_listener, event: postPersist }
             - { name: doctrine.event_listener, event: preUpdate }
@@ -41,23 +33,15 @@ services:
             - { name: doctrine.event_listener, event: postRemove }
             - { name: doctrine.event_listener, event: preRemove }
 
-    # Resolvers
-    numerique1_notification.default_users_resolver:
-        class: %numerique1_notification.default_notifiables_resolver.class%
+#RULE
+    #Provider
+    numerique1_notification.rule.rule_provider:
+        class: %numerique1_notification.rule.rule_provider.class%
         arguments:
-            - @security.context
-        tags:
-            - { name: numerique1_notification.notifiables_resolver, alias: notifiables_resolver }
-
-    numerique1_notification.notifiables_resolver.container:
-        class: %numerique1_notification.notifiables_resolver.container.class%
-        lazy: true
-
-    numerique1_notification.default_template_resolver:
-        class: %numerique1_notification.default_template_resolver.class%
-        tags:
-            - { name: numerique1_notification.template_resolver, alias: template_resolver }
-
-    numerique1_notification.template_resolver.container:
-        class: %numerique1_notification.template_resolver.container.class%
+            - @service_container
+            - %numerique1_notification.configs%
+#BUILDER
+    #Container
+    numerique1_notification.builder.notification_builder_container:
+        class: %numerique1_notification.builder.notification_builder_container.class%
         lazy: true
