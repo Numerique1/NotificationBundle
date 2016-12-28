@@ -6,9 +6,9 @@ The bundle provides a facility to generate notifications (email, database, flash
 
 ## How to use
   - First : Create some notification rules (see: "Configuration Reference")
-  - Then : Create a NotificationBuilder service (tagged 'numerique1_notification.notification_builder') which extends NotificationBuilderInterface. This builder will create the Notification object from the PreBuildNotificationEvent data's and then decide what to do with the notification. (see: "Builder")
+  - Then : Create a service (tagged _'numerique1_notification.notification_builder'_) which extends __NotificationBuilderInterface__. This builder will create the __Notification__ object from the __PreBuildNotificationEvent__ data's and then decide what to do with the notification. (see: "Build Notification")
 
-### Builder : 
+## Build Notification
 ```php
 <?php
 
