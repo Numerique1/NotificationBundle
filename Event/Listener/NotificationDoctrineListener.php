@@ -8,6 +8,7 @@ use Numerique1\Bundle\NotificationBundle\Event\Events\PostPersistNotificationEve
 use Numerique1\Bundle\NotificationBundle\Event\Events\PostRemoveNotificationEvent;
 use Numerique1\Bundle\NotificationBundle\Event\Events\PostUpdateNotificationEvent;
 use Numerique1\Bundle\NotificationBundle\Event\Events\PreBuildNotificationEvent;
+use Numerique1\Bundle\NotificationBundle\Event\Factory\PreBuildNotificationEventFactory;
 use Numerique1\Bundle\NotificationBundle\Event\PreUpdateNotificationEvent;
 use Numerique1\Bundle\NotificationBundle\Rule\RuleProvider;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -21,18 +22,18 @@ class NotificationDoctrineListener
     protected $eventDispatcher;
 
     /**
-     * @var RuleProvider
+     * @var PreBuildNotificationEventFactory
      */
-    protected $ruleProvider;
+    protected $factory;
 
     /**
      * @param EventDispatcherInterface $eventDispatcher
      * @param RuleProvider $ruleProvider
      */
-    public function __construct(EventDispatcherInterface $eventDispatcher, RuleProvider $ruleProvider)
+    public function __construct(EventDispatcherInterface $eventDispatcher, PreBuildNotificationEventFactory $factory)
     {
-        $this->eventDispatcher = $eventDispatcher;
-        $this->ruleProvider    = $ruleProvider;
+        $this->eventDispatcher  = $eventDispatcher;
+        $this->factory          = $factory;
     }
 
 
@@ -105,11 +106,6 @@ class NotificationDoctrineListener
     }
 
     public function createEvent(LifecycleEventArgs $args, $eventName){
-        if($rule = $this->ruleProvider->get($args->getEntity(), $eventName)){
-            return new PreBuildNotificationEvent($args->getEntity(), $rule, array(
-                'em' => $args->getEntityManager(),
-            ));
-        }
-        return false;
+        return $this->factory->create($eventName, $args->getEntity(), array('em' => $args->getEntityManager()));
     }
 }

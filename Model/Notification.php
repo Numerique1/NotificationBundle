@@ -18,6 +18,12 @@ class Notification
     private $recipients;
 
     /**
+     * Mapped - Id of the notification
+     * @var integer
+     */
+    private $id;
+
+    /**
      * Mapped - A human readable text of notification.
      * @var string
      */
@@ -45,7 +51,7 @@ class Notification
      * @param $message
      * @param array $meta
      */
-    public function __construct($message, array $meta){
+    public function __construct($message, array $meta = array()){
         $this->recipients = new ArrayCollection();
 
         $this->instances = new ArrayCollection();

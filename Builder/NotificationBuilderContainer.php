@@ -27,7 +27,7 @@ class NotificationBuilderContainer
      */
     public function addBuilder($serviceId, NotificationBuilderInterface $builder)
     {
-        $this->builders[$serviceId] = $resolver;
+        $this->builders[$serviceId] = $builder;
     }
 
     /**
@@ -39,7 +39,7 @@ class NotificationBuilderContainer
     {
         if(array_key_exists($name, $this->builders))
         {
-            return $this->builder[$name];
+            return $this->builders[$name];
         }
         else
         {

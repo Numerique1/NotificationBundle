@@ -40,12 +40,6 @@ class NotificationBuilderHandler
         $rule = $event->getRule();
 
         $builder = $this->notificationBuilderContainer->getBuilder($rule['builder']);
-        $notification = $builder->build($notification);
-
-        return $this->eventDispatcher->dispatch(
-            PostBuildNotificationEvent::EVENT_NAME,
-            new PostBuildNotificationEvent($event, $notification)
-        );
-
+        $builder->process($builder->build($event));
     }
 }

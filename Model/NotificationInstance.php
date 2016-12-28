@@ -16,6 +16,12 @@ class NotificationInstance
     const STATE_READ = 1;
 
     /**
+     * Mapped - Id of the instance
+     * @var integer
+     */
+    private $id;
+
+    /**
      * Mapped - Notification
      * @var string
      */

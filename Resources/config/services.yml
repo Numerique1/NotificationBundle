@@ -4,15 +4,25 @@ parameters:
     numerique1_notification.event.handler.notification_builder_handler.class: Numerique1\Bundle\NotificationBundle\Event\Handler\NotificationBuilderHandler
     # Listener
     numerique1_notification.event.listener.notification_doctrine_listener.class: Numerique1\Bundle\NotificationBundle\Event\Listener\NotificationDoctrineListener
+    # Factory
+    numerique1_notification.event.factory.pre_build_notification_event_factory.class: Numerique1\Bundle\NotificationBundle\Event\Factory\PreBuildNotificationEventFactory
 # RULE
     #Provider
     numerique1_notification.rule.rule_provider.class: Numerique1\Bundle\NotificationBundle\Rule\RuleProvider
-# Builder
+# BUILDER
     # Container
     numerique1_notification.builder.notification_builder_container.class: Numerique1\Bundle\NotificationBundle\Builder\NotificationBuilderContainer
+# POOL
+    numerique1_notification.notification_pool.class: Numerique1\Bundle\NotificationBundle\Pool\NotificationPool
 
 services:
 #EVENT
+    # Factory
+    numerique1_notification.event.factory.pre_build_notification_event_factory:
+        class: %numerique1_notification.event.factory.pre_build_notification_event_factory.class%
+        arguments:
+            - @numerique1_notification.rule.rule_provider
+
     # Handler
     numerique1_notification.event.handler.notification_builder_handler:
         class: %numerique1_notification.event.handler.notification_builder_handler.class%
@@ -25,7 +35,7 @@ services:
         class: %numerique1_notification.event.listener.notification_doctrine_listener.class%
         arguments:
             - @event_dispatcher
-            - @numerique1_notification.rule.rule_provider
+            - @numerique1_notification.event.factory.pre_build_notification_event_factory
         tags:
             - { name: doctrine.event_listener, event: postPersist }
             - { name: doctrine.event_listener, event: preUpdate }
@@ -45,3 +55,10 @@ services:
     numerique1_notification.builder.notification_builder_container:
         class: %numerique1_notification.builder.notification_builder_container.class%
         lazy: true
+
+#POOL
+    numerique1_notification.notification_pool:
+        class: %numerique1_notification.notification_pool.class%
+        tags:
+            - {name: doctrine.event_listener, event: postFlush }
+
