@@ -2,16 +2,17 @@
 namespace Numerique1\Bundle\NotificationBundle\Event\Handler;
 
 use Doctrine\Common\Util\ClassUtils;
-use Numerique1\Bundle\NotificationBundle\Builder\NotificationBuilderContainer;
+use Numerique1\Bundle\NotificationBundle\Factory\NotificationFactoryContainer;
 use Numerique1\Bundle\NotificationBundle\Event\Events\HandleableNotificationEvent;
 use Numerique1\Bundle\NotificationBundle\Event\Events\PostBuildNotificationEvent;
 use Numerique1\Bundle\NotificationBundle\Event\Events\PreBuildNotificationEvent;
+use Numerique1\Bundle\NotificationBundle\Model\Notification;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Numerique1\Bundle\NotificationBundle\Event\NotificationEvent;
 use Numerique1\Bundle\NotificationBundle\Factory\NotificationFactoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class NotificationBuilderHandler
+class NotificationFactoryHandler
 {
 
     /**
@@ -20,14 +21,14 @@ class NotificationBuilderHandler
     protected $eventDispatcher;
 
     /**
-     * @var NotificationBuilderContainer
+     * @var NotificationFactoryContainer
      */
-    protected $notificationBuilderContainer;
+    protected $notificationFactoryContainer;
 
-    public function __construct(EventDispatcherInterface $eventDispatcher, NotificationBuilderContainer $notificationBuilderContainer)
+    public function __construct(EventDispatcherInterface $eventDispatcher, NotificationFactoryContainer $notificationFactoryContainer)
     {
         $this->eventDispatcher  = $eventDispatcher;
-        $this->notificationBuilderContainer = $notificationBuilderContainer;
+        $this->notificationFactoryContainer = $notificationFactoryContainer;
     }
 
     /**
@@ -39,7 +40,7 @@ class NotificationBuilderHandler
     {
         $rule = $event->getRule();
 
-        $builder = $this->notificationBuilderContainer->getBuilder($rule['builder']);
-        $builder->process($builder->build($event));
+        $factory = $this->notificationFactoryContainer->getFactory($rule['factory']);
+        $notification = $factory->create($event);
     }
 }

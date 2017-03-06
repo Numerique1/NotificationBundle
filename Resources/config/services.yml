@@ -1,7 +1,7 @@
 parameters:
 # EVENT
     # Handler
-    numerique1_notification.event.handler.notification_builder_handler.class: Numerique1\Bundle\NotificationBundle\Event\Handler\NotificationBuilderHandler
+    numerique1_notification.event.handler.notification_factory_handler.class: Numerique1\Bundle\NotificationBundle\Event\Handler\NotificationFactoryHandler
     # Listener
     numerique1_notification.event.listener.notification_doctrine_listener.class: Numerique1\Bundle\NotificationBundle\Event\Listener\NotificationDoctrineListener
     # Factory
@@ -11,7 +11,7 @@ parameters:
     numerique1_notification.rule.rule_provider.class: Numerique1\Bundle\NotificationBundle\Rule\RuleProvider
 # BUILDER
     # Container
-    numerique1_notification.builder.notification_builder_container.class: Numerique1\Bundle\NotificationBundle\Builder\NotificationBuilderContainer
+    numerique1_notification.factory.notification_factory_container.class: Numerique1\Bundle\NotificationBundle\Factory\NotificationFactoryContainer
 # POOL
     numerique1_notification.notification_pool.class: Numerique1\Bundle\NotificationBundle\Pool\NotificationPool
 
@@ -24,11 +24,11 @@ services:
             - @numerique1_notification.rule.rule_provider
 
     # Handler
-    numerique1_notification.event.handler.notification_builder_handler:
-        class: %numerique1_notification.event.handler.notification_builder_handler.class%
+    numerique1_notification.event.handler.notification_factory_handler:
+        class: %numerique1_notification.event.handler.notification_factory_handler.class%
         arguments:
             - @event_dispatcher
-            - @numerique1_notification.builder.notification_builder_container
+            - @numerique1_notification.factory.notification_factory_container
 
    # Listener
     numerique1_notification.event.listener.notification_doctrine_listener.listener:
@@ -49,11 +49,11 @@ services:
         class: %numerique1_notification.rule.rule_provider.class%
         arguments:
             - @service_container
-            - %numerique1_notification.configs%
+            - %numerique1_notification.notifications%
 #BUILDER
     #Container
-    numerique1_notification.builder.notification_builder_container:
-        class: %numerique1_notification.builder.notification_builder_container.class%
+    numerique1_notification.factory.notification_factory_container:
+        class: %numerique1_notification.factory.notification_factory_container.class%
         lazy: true
 
 #POOL

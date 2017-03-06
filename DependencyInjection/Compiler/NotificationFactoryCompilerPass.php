@@ -7,13 +7,13 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 
 /**
- * Class NotificationBuilderCompilerPass
+ * Class NotificationFactoryCompilerPass
  * @package Numerique1\Bundle\NotificationBundle\DependencyInjection\Compiler
  */
-class NotificationBuilderCompilerPass implements CompilerPassInterface
+class NotificationFactoryCompilerPass implements CompilerPassInterface
 {
-    const TAG         = 'numerique1_notification.notification_builder';
-    const SERVICE_KEY = 'numerique1_notification.builder.notification_builder_container';
+    const TAG         = 'numerique1_notification.notification_factory';
+    const SERVICE_KEY = 'numerique1_notification.factory.notification_factory_container';
 
     /**
      * {@inheritDoc}
@@ -28,7 +28,7 @@ class NotificationBuilderCompilerPass implements CompilerPassInterface
         $taggedServices = $container->findTaggedServiceIds(self::TAG);
 
         foreach ($taggedServices as $serviceId => $taggedService) {
-            $serviceDefinition->addMethodCall('addBuilder', array($serviceId, new Reference($serviceId)));
+            $serviceDefinition->addMethodCall('addFactory', array($serviceId, new Reference($serviceId)));
         }
     }
 }

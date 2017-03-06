@@ -18,6 +18,12 @@ class Notification
     private $recipients;
 
     /**
+     * Non-mapped - Notification instances.
+     * @var ArrayCollection
+     */
+    private $instances;
+
+    /**
      * Mapped - Id of the notification
      * @var integer
      */
@@ -36,28 +42,15 @@ class Notification
     private $meta = array();
 
     /**
-     * Mapped - Notification creation date.
-     * @var \DateTime
-     */
-    private $createdAt;
-
-    /**
-     * Mapped - Notification instances.
-     * @var NotificationInstance
-     */
-    private $instances;
-
-    /**
      * @param $message
      * @param array $meta
      */
     public function __construct($message, array $meta = array()){
         $this->recipients = new ArrayCollection();
-
         $this->instances = new ArrayCollection();
+
         $this->message = $message;
         $this->meta = $meta;
-        $this->createdAt = new \DateTime();
     }
 
     /**
@@ -90,22 +83,6 @@ class Notification
     public function setMeta($meta)
     {
         $this->meta = $meta;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @param \DateTime $createdAt
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
     }
 
     /**
@@ -220,6 +197,6 @@ class Notification
     public function createInstance(UserInterface $recipient){
         $instance = new NotificationInstance($this, $recipient);
         $this->addInstance($instance);
-        return $this;
+        return $instance;
     }
 }

@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
  */
 class EventsCompilerPass implements CompilerPassInterface
 {
-    const SERVICE_KEY    = 'numerique1_notification.event.handler.notification_builder_handler';
+    const SERVICE_KEY    = 'numerique1_notification.event.handler.notification_factory_handler';
     const DISPATCHER_KEY = 'event_dispatcher';
 
     /**

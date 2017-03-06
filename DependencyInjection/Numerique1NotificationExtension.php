@@ -22,11 +22,7 @@ class Numerique1NotificationExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-//        $container->setParameter('numerique1_notification.notification_factory.class', $config['factory_class']);
-//        $container->setParameter('numerique1_notification.notification.class', $config['notification_class']);
-//        $container->setParameter('numerique1_notification.instance.class', $config['instance_class']);
-//        unset($config['factory_class']);
-        $container->setParameter('numerique1_notification.configs', $this->parseConfig($config['notifications']));
+        $container->setParameter('numerique1_notification.notifications', $config['notifications']);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
@@ -40,13 +36,14 @@ class Numerique1NotificationExtension extends Extension
      */
     public function parseConfig(array $configs)
     {
-        foreach ($configs as $name => $config)
-        {
-            $configs[$config['class']] = $configs[$name];
-            unset($configs[$config['class']]['class']);
-            unset($configs[$name]);
-        }
-
-        return $configs;
+//        foreach ($configs as $name => $config)
+//        {
+//            $configs[$config['class']] = $configs[$name];
+//            $configs[$config['class']]['reference'] = $name;
+//            unset($configs[$config['class']]['class']);
+//            unset($configs[$name]);
+//        }
+//
+//        return $configs;
     }
 }

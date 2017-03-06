@@ -4,7 +4,7 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                   http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="Numerique1\Bundle\NotificationBundle\Model\NotificationInstance" table="notification_instance">
+    <mapped-superclass name="Numerique1\Bundle\NotificationBundle\Model\NotificationInstance">
 
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
@@ -12,13 +12,13 @@
 
         <field name="state" column="state" type="integer"/>
 
-        <many-to-one field="notification" target-entity="Numerique1\Bundle\NotificationBundle\Model\Notification" inversed-by="instances">
+        <many-to-one field="notification" target-entity="Numerique1\Bundle\NotificationBundle\Model\Notification">
             <join-column name="notification_id" referenced-column-name="id" />
         </many-to-one>
 
         <many-to-one field="recipient" target-entity="Symfony\Component\Security\Core\User\UserInterface">
             <join-column name="recipient_id" referenced-column-name="id" />
         </many-to-one>
-    </entity>
+    </mapped-superclass>
 
 </doctrine-mapping>

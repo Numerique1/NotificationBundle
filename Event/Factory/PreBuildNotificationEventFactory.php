@@ -28,7 +28,7 @@ class PreBuildNotificationEventFactory
     public function create($eventName, $entity, array $extra = array())
     {
         if($rule = $this->ruleProvider->get($entity, $eventName)){
-            return new PreBuildNotificationEvent($entity, $rule, $extra);
+            return new PreBuildNotificationEvent($entity, $rule['match'], array_merge($extra, array("rules" => $rule)));
         }
         return null;
     }

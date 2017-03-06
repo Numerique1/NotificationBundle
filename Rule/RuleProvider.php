@@ -49,6 +49,7 @@ class RuleProvider
         /*Check if entity has config, if not we do not handle*/
         if ($config)
         {
+//            dump($config);die;
             $request = $this->container->get('request');
             $route = $request->attributes->get('_controller');
 
@@ -86,7 +87,8 @@ class RuleProvider
 
             if (count($matchingRules) > 0)
             {
-                return $matchingRules[0];
+                $config['match'] = $matchingRules[0];
+                return $config;
             }
         }
     }
