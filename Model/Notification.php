@@ -9,7 +9,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Class Notification
  * @package Numerique1\Bundle\NotificationBundle\Model
  */
-class Notification
+class Notification implements NotificationInterface
 {
     /**
      * Non-mapped - List of UserInterface used to create NotificationInstance.

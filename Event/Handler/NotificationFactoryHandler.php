@@ -10,6 +10,7 @@ use Numerique1\Bundle\NotificationBundle\Model\Notification;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Numerique1\Bundle\NotificationBundle\Event\NotificationEvent;
 use Numerique1\Bundle\NotificationBundle\Factory\NotificationFactoryInterface;
+use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class NotificationFactoryHandler
@@ -36,11 +37,13 @@ class NotificationFactoryHandler
      * @param NotificationEvent $event
      * @throws \Exception
      */
-    public function handle(PreBuildNotificationEvent $event)
+    public function handle(Event $event)
     {
-        $rule = $event->getRule();
+        if($event instanceof PreBuildNotificationEvent){
+            $rule = $event->getRule();
 
-        $factory = $this->notificationFactoryContainer->getFactory($rule['factory']);
-        $notification = $factory->create($event);
+            $factory = $this->notificationFactoryContainer->getFactory($rule['factory']);
+            $notification = $factory->create($event);
+        }
     }
 }

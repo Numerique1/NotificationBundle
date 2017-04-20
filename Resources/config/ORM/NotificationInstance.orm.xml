@@ -12,7 +12,7 @@
 
         <field name="state" column="state" type="integer"/>
 
-        <many-to-one field="notification" target-entity="Numerique1\Bundle\NotificationBundle\Model\Notification">
+        <many-to-one field="notification" target-entity="Numerique1\Bundle\NotificationBundle\Model\NotificationInterface">
             <join-column name="notification_id" referenced-column-name="id" />
         </many-to-one>
 
