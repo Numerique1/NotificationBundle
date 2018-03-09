@@ -39,7 +39,7 @@ class RuleProvider
      */
     public function get($entity, $eventName)
     {
-        if (null === $this->container->get('security.context')->getToken()){
+        if (null === $this->container->get('security.token_storage')->getToken()){
             return;
         }
 
@@ -49,12 +49,12 @@ class RuleProvider
         /*Check if entity has config, if not we do not handle*/
         if ($config)
         {
-//            dump($config);die;
             $request = $this->container->get('request');
             $route = $request->attributes->get('_controller');
 
             /*Find matching rules on entity configuration*/
             $matchingRules = array();
+
             foreach ($config['rules'] as $rule)
             {
                 if (

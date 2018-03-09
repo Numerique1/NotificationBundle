@@ -21,21 +21,21 @@ services:
     numerique1_notification.event.factory.pre_build_notification_event_factory:
         class: %numerique1_notification.event.factory.pre_build_notification_event_factory.class%
         arguments:
-            - @numerique1_notification.rule.rule_provider
+            - '@numerique1_notification.rule.rule_provider'
 
     # Handler
     numerique1_notification.event.handler.notification_factory_handler:
         class: %numerique1_notification.event.handler.notification_factory_handler.class%
         arguments:
-            - @event_dispatcher
-            - @numerique1_notification.factory.notification_factory_container
+            - '@event_dispatcher'
+            - '@numerique1_notification.factory.notification_factory_container'
 
    # Listener
     numerique1_notification.event.listener.notification_doctrine_listener.listener:
         class: %numerique1_notification.event.listener.notification_doctrine_listener.class%
         arguments:
-            - @event_dispatcher
-            - @numerique1_notification.event.factory.pre_build_notification_event_factory
+            - '@event_dispatcher'
+            - '@numerique1_notification.event.factory.pre_build_notification_event_factory'
         tags:
             - { name: doctrine.event_listener, event: postPersist }
             - { name: doctrine.event_listener, event: preUpdate }
@@ -47,7 +47,7 @@ services:
     numerique1_notification.rule.rule_provider:
         class: %numerique1_notification.rule.rule_provider.class%
         arguments:
-            - @service_container
+            - '@service_container'
             - %numerique1_notification.notifications%
 #BUILDER
     #Container
