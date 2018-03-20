@@ -49,7 +49,7 @@ class RuleProvider
         /*Check if entity has config, if not we do not handle*/
         if ($config)
         {
-            $request = $this->container->get('request');
+            $request = $this->container->get('request_stack')->getMasterRequest();
             $route = $request->attributes->get('_controller');
 
             /*Find matching rules on entity configuration*/

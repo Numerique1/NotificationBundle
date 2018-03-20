@@ -15,31 +15,31 @@ class Notification implements NotificationInterface
      * Non-mapped - List of UserInterface used to create NotificationInstance.
      * @var ArrayCollection
      */
-    private $recipients;
+    protected $recipients;
 
     /**
      * Non-mapped - Notification instances.
      * @var ArrayCollection
      */
-    private $instances;
+    protected $instances;
 
     /**
      * Mapped - Id of the notification
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * Mapped - A human readable text of notification.
      * @var string
      */
-    private $message;
+    protected $message;
 
     /**
      * Mapped - Notification metadata.
      * @var array
      */
-    private $meta = array();
+    protected $meta = array();
 
     /**
      * @param $message

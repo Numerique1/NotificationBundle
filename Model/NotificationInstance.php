@@ -19,25 +19,25 @@ class NotificationInstance
      * Mapped - Id of the instance
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * Mapped - Notification
      * @var string
      */
-    private $notification;
+    protected $notification;
 
     /**
      * Mapped - User to notify
      * @var UserInterface
      */
-    private $recipient;
+    protected $recipient;
 
     /**
      * Mapped - Instance state. ie. new, read
      * @var string
      */
-    private $state;
+    protected $state;
 
     /**
      * @param Notification $notification
