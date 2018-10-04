@@ -39,7 +39,7 @@ class EventsCompilerPass implements CompilerPassInterface
 
         foreach ($eventNames as $eventName) {
             $dispatcher->addMethodCall(
-                'addListenerService',
+                'addListener',
                 array($eventName, array(self::SERVICE_KEY, 'handle'))
             );
         }
