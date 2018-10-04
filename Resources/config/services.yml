@@ -1,38 +1,38 @@
 parameters:
 # EVENT
     # Handler
-    numerique1_notification.event.handler.notification_factory_handler.class: Numerique1\Bundle\NotificationBundle\Event\Handler\NotificationFactoryHandler
+    numerique1_notification.event.handler.notification_factory_handler.class: 'Numerique1\Bundle\NotificationBundle\Event\Handler\NotificationFactoryHandler'
     # Listener
-    numerique1_notification.event.listener.notification_doctrine_listener.class: Numerique1\Bundle\NotificationBundle\Event\Listener\NotificationDoctrineListener
+    numerique1_notification.event.listener.notification_doctrine_listener.class: 'Numerique1\Bundle\NotificationBundle\Event\Listener\NotificationDoctrineListener'
     # Factory
-    numerique1_notification.event.factory.pre_build_notification_event_factory.class: Numerique1\Bundle\NotificationBundle\Event\Factory\PreBuildNotificationEventFactory
+    numerique1_notification.event.factory.pre_build_notification_event_factory.class: 'Numerique1\Bundle\NotificationBundle\Event\Factory\PreBuildNotificationEventFactory'
 # RULE
     #Provider
-    numerique1_notification.rule.rule_provider.class: Numerique1\Bundle\NotificationBundle\Rule\RuleProvider
+    numerique1_notification.rule.rule_provider.class: 'Numerique1\Bundle\NotificationBundle\Rule\RuleProvider'
 # BUILDER
     # Container
-    numerique1_notification.factory.notification_factory_container.class: Numerique1\Bundle\NotificationBundle\Factory\NotificationFactoryContainer
+    numerique1_notification.factory.notification_factory_container.class: 'Numerique1\Bundle\NotificationBundle\Factory\NotificationFactoryContainer'
 # POOL
-    numerique1_notification.notification_pool.class: Numerique1\Bundle\NotificationBundle\Pool\NotificationPool
+    numerique1_notification.notification_pool.class: 'Numerique1\Bundle\NotificationBundle\Pool\NotificationPool'
 
 services:
 #EVENT
     # Factory
     numerique1_notification.event.factory.pre_build_notification_event_factory:
-        class: %numerique1_notification.event.factory.pre_build_notification_event_factory.class%
+        class: '%numerique1_notification.event.factory.pre_build_notification_event_factory.class%'
         arguments:
             - '@numerique1_notification.rule.rule_provider'
 
     # Handler
     numerique1_notification.event.handler.notification_factory_handler:
-        class: %numerique1_notification.event.handler.notification_factory_handler.class%
+        class: '%numerique1_notification.event.handler.notification_factory_handler.class%'
         arguments:
             - '@event_dispatcher'
             - '@numerique1_notification.factory.notification_factory_container'
 
    # Listener
     numerique1_notification.event.listener.notification_doctrine_listener.listener:
-        class: %numerique1_notification.event.listener.notification_doctrine_listener.class%
+        class: '%numerique1_notification.event.listener.notification_doctrine_listener.class%'
         arguments:
             - '@event_dispatcher'
             - '@numerique1_notification.event.factory.pre_build_notification_event_factory'
@@ -45,19 +45,19 @@ services:
 #RULE
     #Provider
     numerique1_notification.rule.rule_provider:
-        class: %numerique1_notification.rule.rule_provider.class%
+        class: '%numerique1_notification.rule.rule_provider.class%'
         arguments:
             - '@service_container'
-            - %numerique1_notification.notifications%
+            - '%numerique1_notification.notifications%'
 #BUILDER
     #Container
     numerique1_notification.factory.notification_factory_container:
-        class: %numerique1_notification.factory.notification_factory_container.class%
+        class: '%numerique1_notification.factory.notification_factory_container.class%'
         lazy: true
 
 #POOL
     numerique1_notification.notification_pool:
-        class: %numerique1_notification.notification_pool.class%
+        class: '%numerique1_notification.notification_pool.class%'
         tags:
             - {name: doctrine.event_listener, event: postFlush }
 
