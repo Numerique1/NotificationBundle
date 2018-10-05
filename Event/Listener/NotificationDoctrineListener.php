@@ -1,9 +1,11 @@
 <?php
 namespace Numerique1\Bundle\NotificationBundle\Event\Listener;
 
+use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Doctrine\ORM\Events;
 use Numerique1\Bundle\NotificationBundle\Event\Events\PostPersistNotificationEvent;
 use Numerique1\Bundle\NotificationBundle\Event\Events\PostRemoveNotificationEvent;
 use Numerique1\Bundle\NotificationBundle\Event\Events\PostUpdateNotificationEvent;
@@ -14,8 +16,22 @@ use Numerique1\Bundle\NotificationBundle\Rule\RuleProvider;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Numerique1\Bundle\NotificationBundle\Event\NotificationEvent;
 
-class NotificationDoctrineListener
+class NotificationDoctrineListener implements EventSubscriber
 {
+
+    /**
+     * @return array|string[]
+     */
+    public function getSubscribedEvents()
+    {
+        return array(
+            Events::postPersist,
+            Events::preUpdate,
+            Events::postUpdate,
+            Events::postRemove
+        );
+    }
+
     /**
      * @var EventDispatcherInterface
      */

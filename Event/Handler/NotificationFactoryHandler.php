@@ -11,10 +11,22 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Numerique1\Bundle\NotificationBundle\Event\NotificationEvent;
 use Numerique1\Bundle\NotificationBundle\Factory\NotificationFactoryInterface;
 use Symfony\Component\EventDispatcher\Event;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class NotificationFactoryHandler
+class NotificationFactoryHandler implements EventSubscriberInterface
 {
+
+    public static function getSubscribedEvents(){
+        return [
+            PreBuildNotificationEvent::EVENT_NAME_PRE_PERSIST => "handle",
+            PreBuildNotificationEvent::EVENT_NAME_POST_PERSIST => "handle",
+            PreBuildNotificationEvent::EVENT_NAME_PRE_UPDATE => "handle",
+            PreBuildNotificationEvent::EVENT_NAME_POST_UPDATE => "handle",
+            PreBuildNotificationEvent::EVENT_NAME_PRE_REMOVE => "handle",
+            PreBuildNotificationEvent::EVENT_NAME_POST_REMOVE => "handle",
+            PreBuildNotificationEvent::EVENT_NAME_CONTROLLER => "handle"
+        ];
+    }
 
     /**
      * @var EventDispatcherInterface
@@ -26,7 +38,7 @@ class NotificationFactoryHandler
      */
     protected $notificationFactoryContainer;
 
-    public function __construct(EventDispatcherInterface $eventDispatcher, NotificationFactoryContainer $notificationFactoryContainer)
+    public function __construct($eventDispatcher, NotificationFactoryContainer $notificationFactoryContainer)
     {
         $this->eventDispatcher  = $eventDispatcher;
         $this->notificationFactoryContainer = $notificationFactoryContainer;
@@ -41,9 +53,8 @@ class NotificationFactoryHandler
     {
         if($event instanceof PreBuildNotificationEvent){
             $rule = $event->getRule();
-
             $factory = $this->notificationFactoryContainer->getFactory($rule['factory']);
-            $notification = $factory->create($event);
+            $factory->create($event);
         }
     }
 }

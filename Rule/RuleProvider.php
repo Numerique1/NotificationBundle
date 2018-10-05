@@ -99,11 +99,11 @@ class RuleProvider
      */
     public function getConfig($entityClass)
     {
-        if (array_key_exists($entityClass, $this->config))
-        {
-            return $this->config[$entityClass];
+        foreach($this->config as $config){
+            if($config["reference"] === $entityClass){
+                return $config;
+            }
         }
-
         return;
     }
 }

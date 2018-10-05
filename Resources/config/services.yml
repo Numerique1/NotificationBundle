@@ -1,9 +1,5 @@
 parameters:
 # EVENT
-    # Handler
-    numerique1_notification.event.handler.notification_factory_handler.class: 'Numerique1\Bundle\NotificationBundle\Event\Handler\NotificationFactoryHandler'
-    # Listener
-    numerique1_notification.event.listener.notification_doctrine_listener.class: 'Numerique1\Bundle\NotificationBundle\Event\Listener\NotificationDoctrineListener'
     # Factory
     numerique1_notification.event.factory.pre_build_notification_event_factory.class: 'Numerique1\Bundle\NotificationBundle\Event\Factory\PreBuildNotificationEventFactory'
 # RULE
@@ -16,6 +12,12 @@ parameters:
     numerique1_notification.notification_pool.class: 'Numerique1\Bundle\NotificationBundle\Pool\NotificationPool'
 
 services:
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        public: false       # Allows optimizing the container by removing unused services; this also means
+                            # fetching services directly from the container via $container->get() won't work.
+                            # The best practice is to be explicit about your dependencies anyway.
 #EVENT
     # Factory
     numerique1_notification.event.factory.pre_build_notification_event_factory:
@@ -24,23 +26,16 @@ services:
             - '@numerique1_notification.rule.rule_provider'
 
     # Handler
-    numerique1_notification.event.handler.notification_factory_handler:
-        class: '%numerique1_notification.event.handler.notification_factory_handler.class%'
-        arguments:
-            - '@event_dispatcher'
-            - '@numerique1_notification.factory.notification_factory_container'
+    Numerique1\Bundle\NotificationBundle\Event\Handler\NotificationFactoryHandler:
+      tags:
+        - { name: numerique1_notification.event_subscriber }
+      arguments: ['@event_dispatcher', '@numerique1_notification.factory.notification_factory_container']
 
    # Listener
-    numerique1_notification.event.listener.notification_doctrine_listener.listener:
-        class: '%numerique1_notification.event.listener.notification_doctrine_listener.class%'
-        arguments:
-            - '@event_dispatcher'
-            - '@numerique1_notification.event.factory.pre_build_notification_event_factory'
-        tags:
-            - { name: doctrine.event_listener, event: postPersist }
-            - { name: doctrine.event_listener, event: preUpdate }
-            - { name: doctrine.event_listener, event: postUpdate }
-            - { name: doctrine.event_listener, event: postRemove }
+    Numerique1\Bundle\NotificationBundle\Event\Listener\NotificationDoctrineListener:
+      arguments: ['@event_dispatcher', '@numerique1_notification.event.factory.pre_build_notification_event_factory']
+      tags:
+        - { name: doctrine.event_subscriber }
 
 #RULE
     #Provider
