@@ -40,6 +40,11 @@ class Notification implements NotificationInterface
      * @var array
      */
     protected $meta = array();
+    
+       /**
+     * @var mixed
+     */
+    public $object = null;
 
     /**
      * @param $message
